@@ -22,7 +22,8 @@ namespace Muresan_Cristian_Lab2.Controllers
         // GET: Books
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Books.ToListAsync());
+            var libraryContext = _context.Books.Include(b => b.Author);
+            return View(await libraryContext.ToListAsync());
         }
 
         // GET: Books/Details/5
@@ -34,6 +35,7 @@ namespace Muresan_Cristian_Lab2.Controllers
             }
 
             var book = await _context.Books
+                .Include(b => b.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {
@@ -46,6 +48,13 @@ namespace Muresan_Cristian_Lab2.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
+            var authors = _context.Authors.Select(x => new
+            {
+                Id = x.Id,
+                FullName = $"{x.FirstName} {x.LastName}"
+            }).ToList();
+
+            ViewData["AuthorId"] = new SelectList(authors, "Id", "FullName");
             return View();
         }
 
@@ -54,7 +63,7 @@ namespace Muresan_Cristian_Lab2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Author,Price")] Book book)
+        public async Task<IActionResult> Create([Bind("Id,Title,AuthorId,Price")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +71,7 @@ namespace Muresan_Cristian_Lab2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "Id", book.AuthorId);
             return View(book);
         }
 
@@ -78,6 +88,13 @@ namespace Muresan_Cristian_Lab2.Controllers
             {
                 return NotFound();
             }
+            var authors = _context.Authors.Select(x => new
+            {
+                Id = x.Id,
+                FullName = $"{x.FirstName} {x.LastName}"
+            }).ToList();
+
+            ViewData["AuthorId"] = new SelectList(authors, "Id", "FullName", book.AuthorId);
             return View(book);
         }
 
@@ -86,7 +103,7 @@ namespace Muresan_Cristian_Lab2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Author,Price")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,AuthorId,Price")] Book book)
         {
             if (id != book.Id)
             {
@@ -113,6 +130,14 @@ namespace Muresan_Cristian_Lab2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var authors = _context.Authors.Select(x => new
+            {
+                Id = x.Id,
+                FullName = $"{x.FirstName} {x.LastName}"
+            }).ToList();
+
+            ViewData["AuthorId"] = new SelectList(authors, "Id", "FullName", book.AuthorId);
+
             return View(book);
         }
 
@@ -125,6 +150,7 @@ namespace Muresan_Cristian_Lab2.Controllers
             }
 
             var book = await _context.Books
+                .Include(b => b.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (book == null)
             {

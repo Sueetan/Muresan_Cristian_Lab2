@@ -11,6 +11,8 @@ namespace Muresan_Cristian_Lab2.Data
 
         public DbSet<Book> Books { get; set; }
 
+        public DbSet<Author> Authors { get; set; }
+
         public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
         {
         }
@@ -20,6 +22,7 @@ namespace Muresan_Cristian_Lab2.Data
             modelBuilder.Entity<Customer>().ToTable("Customer");
             modelBuilder.Entity<Order>().ToTable("Order");
             modelBuilder.Entity<Book>().ToTable("Book");
+            modelBuilder.Entity<Author>().ToTable("Author");
         }
     }
 }

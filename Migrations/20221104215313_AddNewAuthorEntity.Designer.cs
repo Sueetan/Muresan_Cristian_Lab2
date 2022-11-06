@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Muresan_Cristian_Lab2.Data;
 
@@ -11,9 +12,10 @@ using Muresan_Cristian_Lab2.Data;
 namespace Muresan_Cristian_Lab2.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20221104215313_AddNewAuthorEntity")]
+    partial class AddNewAuthorEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,7 +120,7 @@ namespace Muresan_Cristian_Lab2.Migrations
             modelBuilder.Entity("Muresan_Cristian_Lab2.Models.Book", b =>
                 {
                     b.HasOne("Muresan_Cristian_Lab2.Models.Author", "Author")
-                        .WithMany("Books")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -143,11 +145,6 @@ namespace Muresan_Cristian_Lab2.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("Muresan_Cristian_Lab2.Models.Author", b =>
-                {
-                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("Muresan_Cristian_Lab2.Models.Book", b =>

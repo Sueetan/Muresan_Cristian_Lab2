@@ -14,20 +14,41 @@ namespace Muresan_Cristian_Lab2.Data
                     return;
                 }
 
+                context.AddRange(
+                    new Author { 
+                        FirstName = "Mihail", 
+                        LastName = "Sadoveanu"
+                    },
+                    new Author
+                    {
+                        FirstName = "George",
+                        LastName = "Calinescu"
+                    },
+                    new Author
+                    {
+                        FirstName = "Mircea",
+                        LastName = "Eliade"
+                    });
+
+                context.SaveChanges();
+
                 context.Books.AddRange( 
                 new Book {
                     Title = "Baltagul",
-                    Author = "Mihail Sadoveanu",Price=Decimal.Parse("22")
+                    AuthorId = context.Authors.Where(x => x.FirstName == "Mihail").Select(x => x.Id).First(),
+                    Price = Decimal.Parse("22")
                 },
                 new Book
                 {
                     Title = "Enigma Otiliei",
-                    Author = "George Calinescu",Price=Decimal.Parse("18")
+                    AuthorId = context.Authors.Where(x => x.FirstName == "George").Select(x => x.Id).First(),
+                    Price = Decimal.Parse("18")
                 },
                 new Book
                 {
                     Title = "Maytrei",
-                    Author = "Mircea Eliade",Price=Decimal.Parse("27")
+                    AuthorId = context.Authors.Where(x => x.FirstName == "Mircea").Select(x => x.Id).First(),
+                    Price = Decimal.Parse("27")
                 });
 
 
